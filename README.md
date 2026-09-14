@@ -11,7 +11,7 @@
 | Component | Location |
 |---|---|
 | Video | YouTube link (submitted separately) |
-| Research document | `Task1_Research_Report.docx` |
+| Research document | `ST10443542_Task1_Research_Report_POE_PART1.docx` |
 | Code | `PROG7312_Poe_ST10443542/Part1/Code-Source/SmartX_PoE_Code` |
  
 ---
