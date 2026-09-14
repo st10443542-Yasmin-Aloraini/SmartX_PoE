@@ -77,6 +77,37 @@ public sealed class MockTelemetrySeeder : BackgroundService
                 }
             }
 
+            // Also keep simulating any sensor added later through the registration form/API.
+            // Without this, a user-registered sensor only ever gets the single seed reading
+            // taken at registration time and then goes silent, so it gets marked Disconnected
+            // a few seconds later instead of behaving like a normal live tile.
+            foreach (var sensor in _registry.All())
+            {
+                var isFixedDevice = _devices.Any(d =>
+                    string.Equals(d.Mac, sensor.DeviceMacAddress, StringComparison.OrdinalIgnoreCase));
+                if (isFixedDevice)
+                    continue;
+
+                switch (sensor.DataKind)
+                {
+                    case TelemetryDataKind.Float:
+                        var baseline = sensor.Category == SensorCategory.Environmental ? 45.0 : 22.0;
+                        var noise = (_random.NextDouble() - 0.5) * 4.0;
+                        var value = Math.Round(baseline + noise, 2);
+                        _engine.IngestNumeric(sensor.DeviceMacAddress, sensor.Location, sensor.Category, sensor.DataKind, value);
+                        break;
+
+                    case TelemetryDataKind.Integer:
+                        var wattage = 300 + _random.Next(-20, 20);
+                        _engine.IngestNumeric(sensor.DeviceMacAddress, sensor.Location, sensor.Category, sensor.DataKind, wattage);
+                        break;
+
+                    case TelemetryDataKind.Boolean:
+                        _engine.IngestBoolean(sensor.DeviceMacAddress, sensor.Location, sensor.Category, _random.NextDouble() < 0.5);
+                        break;
+                }
+            }
+
             if (powerWattages.Length > 0)
                 _powerGrid.RecordSlot(powerWattages);
 
