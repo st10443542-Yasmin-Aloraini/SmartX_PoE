@@ -12,7 +12,7 @@
 |---|---|
 | Video | YouTube link (submitted separately) |
 | Research document | `Task1_Research_Report.docx` |
-| Code | `PROG7312_Poe_ST10443542/Part1/Code-Source` |
+| Code | `PROG7312_Poe_ST10443542/Part1/Code-Source/SmartX_PoE_Code` |
  
 ---
  
